@@ -1,0 +1,15 @@
+GET http://localhost:3000
+###
+POST  http://localhost:3000/user/register
+Content-Type: application/json
+
+{
+    "email" : "duqyuaaang21@gmail.com",
+    "password" : "1234a56"
+}
+###
+POST  http://localhost:3000/user/refresh-token
+###
+POST  http://localhost:3000/user/login
+###
+POST  http://localhost:3000/user/logout
