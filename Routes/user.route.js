@@ -3,7 +3,8 @@ const createError = require('http-errors');
 const route = express.Router();
 const User = require('../Models/user.model');
 const { userValidate } = require('../Helpers/validation');
-const { signAccessToken, verifyToken, signRefreshToken } = require('../Helpers/jwt_service');
+const { signAccessToken, verifyAccessToken, signRefreshToken, verifyRefreshToken } = require('../Helpers/jwt_service');
+const client = require('../Helpers/connection_redis');
 
 route.post('/register', async (req, res, next) => {
     try {
@@ -30,8 +31,24 @@ route.post('/register', async (req, res, next) => {
     }
 })
 
-route.post('/refresh-token', (req, res, next) => {
-    res.send('function refresh-token');
+route.post('/refresh-token', async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            throw createError.BadRequest();
+        }
+        const { userId } = await verifyRefreshToken(refreshToken);
+        const accessToken = await signAccessToken(userId);
+        const rfreshToken = await signRefreshToken(userId);
+        res.json({
+            accessToken,
+            refreshToken: rfreshToken
+        })
+
+    } catch (error) {
+        next(error)
+    }
 })
 
 route.post('/login', async (req, res, next) => {
@@ -60,11 +77,28 @@ route.post('/login', async (req, res, next) => {
     }
 })
 
-route.post('/logout', (req, res, next) => {
-    res.send('function logout');
+route.delete('/logout', async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            throw createError.BadRequest();
+        }
+        const { userId } = await verifyRefreshToken(refreshToken);
+        client.del(userId.toString(), (err, reply) => {
+            if (err) {
+                throw createError.InternalServerError();
+            }
+            res.json({
+                message: 'Logout!!!'
+            })
+        })
+    } catch (error) {
+        next(error);
+    }
 })
 
-route.get('/getList', verifyToken, async (req, res, next) => {
+route.get('/getList', verifyAccessToken, async (req, res, next) => {
     const listUsers = await User.find();
     return res.json({
         listUsers

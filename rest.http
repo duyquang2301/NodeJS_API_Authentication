@@ -9,7 +9,22 @@ Content-Type: application/json
 }
 ###
 POST  http://localhost:3000/user/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGI5NTYxMDNkZWEzZGZlNjA1MmUxYjgiLCJpYXQiOjE2OTAwMjc5MzcsImV4cCI6MTcyMTU4NTUzN30.h8J8AxGUwiZ4CilefgsCVEKA6OGgWDQDjtzMv5nzdWc"
+}
 ###
 POST  http://localhost:3000/user/login
+Content-Type: application/json
+
+{
+    "email" : "duqyuaaang21@gmail.com",
+    "password" : "1234a56"
+}
 ###
 POST  http://localhost:3000/user/logout
+
+###
+GET   http://localhost:3000/user/getList
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGI5NTYxMDNkZWEzZGZlNjA1MmUxYjgiLCJpYXQiOjE2ODk4NzIxMTMsImV4cCI6MTY4OTg3NTcxM30.4uOHSIq9Gm4i3HNdBXYiVHpi3Fvcy2kefqa-XPLoAtU
