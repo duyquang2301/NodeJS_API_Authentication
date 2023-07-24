@@ -1,7 +1,7 @@
 const express = require('express');
 const createError = require('http-errors');
 const userRoute = require('./Routes/user.route');
-const db = require('./Helpers/connection_mogoosedb');
+const db = require('./Config/connection_mogoosedb');
 const dotenv = require('dotenv');
 
 dotenv.config();
